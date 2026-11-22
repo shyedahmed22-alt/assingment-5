@@ -20,7 +20,54 @@
      <!-- fontawesome -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
-<body>
-    <h1>hello</h1>
+<body class="bg-[#F8FAFC]">
+    <header class="bg-base-100 shadow-sm mb-15">
+        <nav class="navbar mx-auto px-4">
+            <div class="flex-1">
+                <a class="flex items-center gap-2 font-bold text-base-content">
+
+                 <img src="assets/github-logo.png" class="max-w-10" alt="" srcset="">
+
+                    <span class="text-2xl">GitHub Issues Tracker</span>
+                </a>
+            </div>
+
+            <div class="flex items-center gap-2">
+
+                <input
+                    type="text"
+                    placeholder="⌕ Search issues..."
+                    class="input input-bordered  w-full rounded-sm"
+                />
+
+                <button class="btn btn-primary  rounded-sm bg-violet-600 border-none hover:bg-violet-700 text-white">
+                    search
+                </button>
+
+            </div>
+
+        </nav>
+    </header>
+    <section class="mx-36.25 shadow-sm p-6 rounded-lg space-x-2">
+        <button id="all" class="btn btn-outline btn-primary">All</button>
+        <button id="open" class="btn btn-outline btn-primary">Open</button>
+        <button id="closed" class="btn btn-outline btn-primary">Closed</button>
+    </section>
+    <section class="mx-36.25  p-6 rounded-lg space-x-2">
+        <div class="flex gap-5 items-center border-b-2 border-gray-200 rounded-lg">
+            <div>
+                <img src="assets/Aperture.png" alt="">
+            </div>
+            <div class="">
+                <h4 id="issues-number" class="text-[20px] font-semibold">0</h4>
+                <p class="text-[#64748B]">Track and manage your project issues</p>
+            </div>
+        </div>
+
+        <div id="issues-cont" class="bg-[#FBFBFB] gap-3 p-6 grid grid-cols-4 ">
+
+        </div>
+    </section>
+    <script src="script/main.js"></script>
 </body>
 </html>
