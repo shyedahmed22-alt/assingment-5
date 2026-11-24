@@ -4,6 +4,68 @@ const allIsseues = ()=>{
     .then((res)=> res.json())
     .then((data)=> displayIssues(data.data))
 }
+function loadWordDetail(id){
+    const url =`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`
+    fetch(url)
+    .then((res)=> res.json())
+    .then((data)=> displayDetails(data.data))
+}
+const displayDetails=(data)=>{
+    const detailsContainer = document.getElementById("details-cont");
+        const labels = data.labels.map(label => {
+        return `
+         <div class="${
+            label === "bug"
+            ? "text-red-500 bg-red-100 border-2 border-red-300 rounded-full p-1.5 text-xs"
+            : label === "enhancement"
+            ? "text-green-500 bg-green-50 border-2 border-green-300 rounded-full p-1.5 text-xs"
+            : label === "good first issue"
+            ? "hidden"
+            : "text-yellow-500 bg-yellow-50 border-2 border-yellow-300 rounded-full p-1.5 text-xs"
+        }">
+            ${label==="bug"
+                ?`<i class="fa-solid fa-bug"></i> ${label}`
+                : label === "help wanted"
+                ?`<i class="fa-solid fa-life-ring"></i> ${label}`
+                :`${label}`
+            }
+        </div>`;
+    }).join(""); 
+    detailsContainer.innerHTML=`
+        <h2 class="text-2xl font-bold mb-2">${data.title}</h2>
+        <div class="flex gap-8 items-center mb-6">
+                <p class="text-white bg-[#00A96E] rounded-full px-2 py-1.5">Opened</p>
+                <ul class="flex gap-8 list-disc">
+                    <li>Opened by Sayed</li>
+                    <li>${data.createdAt}</li>
+                </ul>
+        </div>
+        <div class="flex gap-2 mb-6">
+            ${labels}
+        </div>
+        <p class="mb-6 text-[#64748B]">
+            ${data.description}
+        </p>
+
+        <div class="bg-[#F8FAFC] rounded-lg p-4 flex justify-between">
+            <div class="">
+                    <h4 class="text-[#64748B]">Assignee:</h4>
+                     <h4 class="font-semibold">${data.assignee===""? "Unknown": data.assignee}</h4>
+            </div>
+            <div class="text-center">
+                <h4 class="text-[#64748B]">Priority:</h4>
+                <h4 class="${data.priority ==="high"
+                        ? "bg-red-100 text-red-500 rounded-full px-7 py-1.5 text-xs"
+                        : data.priority === "medium"
+                        ? "bg-yellow-100 text-yellow-500 rounded-full px-7 py-1.5 text-xs"
+                        :"bg-green-100 text-green-500 rounded-full px-7 py-1.5 text-xs"
+                    }">${data.priority }</h4>
+            </div>
+        </div>
+        
+    `
+    document.getElementById("word_modal").showModal()
+}
 const displayIssues=(datas)=>{
     const issuecontainer = document.getElementById("issues-cont")
     const issuenumber = document.getElementById("issues-number")
@@ -20,15 +82,20 @@ const displayIssues=(datas)=>{
             ? "hidden"
             : "text-yellow-500 bg-yellow-50 border-2 border-yellow-300 rounded-full p-1.5 text-xs"
         }">
-            ${label}
+            ${label==="bug"
+                ?`<i class="fa-solid fa-bug"></i> ${label}`
+                : label === "help wanted"
+                ?`<i class="fa-solid fa-life-ring"></i> ${label}`
+                :`${label}`
+            }
         </div>`;
     }).join("");    
         const div = document.createElement("div")
         div.innerHTML=`
-        <div class="border-t-4 border-green-600 space-y-3 rounded-lg shadow-sm">
+        <div onclick="loadWordDetail(${data.id})" class="border-t-4 ${data.status == "open"? "border-green-600" : "border-[#A855F7]" }  space-y-3 rounded-lg shadow-sm">
                 <div class="flex justify-between items-center px-4 pt-4">
-                    <div class=""><img src="assets/Open-Status.png" alt=""></div>
-                    <div class=" hidden"><img src="assets/Closed- Status .png" alt=""></div>
+                    <div class="${data.status === "open" ? "" : "hidden"}"><img src="assets/Open-Status.png" alt=""></div>
+                    <div class="${data.status === "closed" ? "" : "hidden"}"><img src="assets/Closed- Status .png" alt=""></div>
                     <h4 class="${data.priority ==="high"
                         ? "bg-red-100 text-red-500 rounded-full px-7 py-1.5 text-xs"
                         : data.priority === "medium"
@@ -46,7 +113,7 @@ const displayIssues=(datas)=>{
                 </div>
 
                 <div class="p-4">
-                    <h5 class="text-xs text-[#64748B]">${data.author}/h5>
+                    <h5 class="text-xs text-[#64748B]">${data.author}</h5>
                     <p class="text-xs text-[#64748B]">${data.createdAt}</p>
                 </div>
                 
@@ -55,5 +122,11 @@ const displayIssues=(datas)=>{
         issuecontainer.append(div)
     });
 }
-
+const searchdata=()=>{
+    const searcheddata = document.getElementById("search-input").value;
+    console.log(searcheddata)
+    fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searcheddata}`)
+    .then((res)=> res.json())
+    .then((data)=> console.log(data))
+}
 allIsseues()
