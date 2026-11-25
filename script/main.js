@@ -1,14 +1,35 @@
-const allIsseues = ()=>{
-    const url = `https://phi-lab-server.vercel.app/api/v1/lab/issues`
+let allIssues = [];
+
+const loadALLIsseues = () => {
+    const url = `https://phi-lab-server.vercel.app/api/v1/lab/issues`;
+
     fetch(url)
-    .then((res)=> res.json())
-    .then((data)=> displayIssues(data.data))
-}
+        .then(res => res.json())
+        .then(data => {
+            allIssues = data.data;
+            displayIssues(allIssues);
+        });
+};
+const filterIssues = (status) => {
+    currentFilter = status;
+
+    if (status === "all") {
+        displayIssues(allIssues);
+    }
+    else {
+        const filtered = allIssues.filter(issue => issue.status === status);
+
+        displayIssues(filtered);
+    }
+};
 function loadWordDetail(id){
     const url =`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`
     fetch(url)
     .then((res)=> res.json())
-    .then((data)=> displayDetails(data.data))
+    .then((data)=> {
+        displayDetails(data.data)
+         changeStatus(id)
+    })
 }
 const displayDetails=(data)=>{
     const detailsContainer = document.getElementById("details-cont");
@@ -65,9 +86,11 @@ const displayDetails=(data)=>{
         
     `
     document.getElementById("word_modal").showModal()
+
 }
 const displayIssues=(datas)=>{
     const issuecontainer = document.getElementById("issues-cont")
+    issuecontainer.innerHTML=""
     const issuenumber = document.getElementById("issues-number")
     issuenumber.innerText = datas.length
     datas.forEach(data => {
@@ -124,9 +147,23 @@ const displayIssues=(datas)=>{
 }
 const searchdata=()=>{
     const searcheddata = document.getElementById("search-input").value;
+    const issuecontainer = document.getElementById("issues-cont")
+    issuecontainer.innerHTML=""
     console.log(searcheddata)
     fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searcheddata}`)
     .then((res)=> res.json())
     .then((data)=> console.log(data))
 }
-allIsseues()
+const activebutton=(id)=>{
+    const allbtns = document.querySelectorAll(".filterbtn");
+    allbtns.forEach(btn=>{
+        btn.classList.remove("active")
+    })
+    document.getElementById(id).classList.add("active")
+}
+document.getElementById("all").addEventListener("click", function(){
+    activebutton("all")
+})
+document.getElementById("open").addEventListener("click", function(){activebutton("open")})
+document.getElementById("closed").addEventListener("click", function(){activebutton("closed")} )
+loadALLIsseues()

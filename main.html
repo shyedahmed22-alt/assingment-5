@@ -50,9 +50,9 @@
         </nav>
     </header>
     <section class="mx-36.25 shadow-sm p-6 rounded-lg space-x-2">
-        <button id="all" class="btn btn-outline btn-primary">All</button>
-        <button id="open" class="btn btn-outline btn-primary">Open</button>
-        <button id="closed" class="btn btn-outline btn-primary">Closed</button>
+        <button onclick="filterIssues('all')" id="all" class="filterbtn btn btn-outline btn-primary">All</button>
+        <button onclick="filterIssues('open')" id="open" class="filterbtn btn btn-outline btn-primary">Open</button>
+        <button onclick="filterIssues('closed')" id="closed" class="filterbtn btn btn-outline btn-primary">Closed</button>
     </section>
     <section class="mx-36.25  p-6 rounded-lg space-x-2">
         <div class="flex gap-5 items-center border-b-2 border-gray-200 rounded-lg">
